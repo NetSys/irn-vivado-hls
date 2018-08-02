@@ -6,7 +6,7 @@ There are two folders in the repository:
 
 **irn_receiver**: This folder contains the code for the receiver side module, namely *receiveData*.
 
-**irn_sender**: THis folder contains the code for sender side modules, namely *txFree*, *receiveAck* and *timeout*.
+**irn_sender**: This folder contains the code for sender side modules, namely *txFree*, *receiveAck* and *timeout*.
 
 Each folder contains scripts to run synthesis, RTL verification and exporting for each module. A sample trace for input to the respective modules and the output, generated via simulations, has also been provided for the verification. 
 
