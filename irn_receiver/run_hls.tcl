@@ -13,4 +13,5 @@ create_clock -period 6.3
 csim_design
 csynth_design
 cosim_design
+export_design
 exit

@@ -10,6 +10,7 @@ do
 	for func in txFree receiveAck timeout
 	do
 		cp bitmapSize-$i.hpp bitmapSize.hpp
+		cp traces/sendInput-40Gbps-incast.txt input_trace.txt
 		vivado_hls run_hls_$func.tcl
 		rm -rf rdma_sender_$func/solution-$i
 		mkdir rdma_sender_$func/solution-$i
