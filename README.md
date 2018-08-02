@@ -36,4 +36,4 @@ The code assumes availability to Xilinx Vivado HLS 2017.2 (or any other HLS vers
 
 4. For each *$module* in *(txFree, receiveAck, timeout)*, the synthesis report can be found in *rdma_sender_$module/solution-128/syn/report/$module_csynth.rpt*.  
 
-5. The trace output can be found at *rdma_sender_$module/solution-128/sim/wrapc/output.txt* and can be compared against *traces/sendOutput-40Gbps-incast.txt*
+5. The trace output can be found at *rdma_sender_$module/solution-128/sim/wrapc/output.txt* and can be compared against *traces/sendOutput-40Gbps-incast.txt* (after concatenating part1 and part2 of the latter).
