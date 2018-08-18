@@ -28,7 +28,7 @@ The code assumes availability to Xilinx Vivado HLS 2017.2 (or any other HLS vers
 
 5. The trace output can be found at *rdma_receiver/solution-128/sim/wrapc/output.txt* and can be compared against *traces/recvOutput-40Gbps-incast.txt*
 
-###### Sender
+###### IRN Sender
 
 1. Go to *irn_sender* folder.
 
