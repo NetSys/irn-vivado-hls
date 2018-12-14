@@ -2,8 +2,6 @@
 #source "path to Vivado installation"/settings64.sh
 #export XILINXD_LICENSE_FILE="source of license file"
 
-touch recvData_report_summary
-
 
 for i in 128
 do

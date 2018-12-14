@@ -2,10 +2,6 @@
 #source "path to Vivado installation"/settings64.sh
 #export XILINXD_LICENSE_FILE="source of license file"
 
-touch txFree_report_summary
-touch receiveAck_report_summary
-touch timeout_report_summary
-
 for i in 128
 do
 	for func in txFree receiveAck timeout
