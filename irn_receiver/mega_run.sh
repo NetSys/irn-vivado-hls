@@ -1,5 +1,5 @@
 source /data/xilinx/Vivado/2017.2/settings64.sh
-export XILINXD_LICENSE_FILE="source of file"
+export XILINXD_LICENSE_FILE="source of license file"
 
 touch recvData_report_summary
 

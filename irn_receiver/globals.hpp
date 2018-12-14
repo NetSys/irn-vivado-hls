@@ -1,3 +1,6 @@
+/* Author: Radhika Mittal
+ * File description: header file for defining structs and key modules. 
+ */ 
 #ifndef GLOBALS_HPP_
 #define GLOBALS_HPP_
 
@@ -18,28 +21,25 @@ using namespace hls;
 
 #define N 1000 
 
-struct axiWordData
-{
-   //My format for data: QID (24), opcode (5), seqNo (24) 
-   ap_uint<128>  data; 
-//   ap_uint<8>   strb;
-//   ap_uint<1>   last;
-};
+//opcode definitions as per Sec 9.2.1 of RDMA specification by Infiniband Trade Association
+#define SEND_LAST 2
+#define SEND_LAST_IMM 3
+#define SEND_ONLY 4
+#define SEND_ONLY_IMM 5
+#define WRITE_LAST 8
+#define WRITE_ONLY 10
+#define READ_REQ 12
+#define WRITE_LAST_IMM 9
+#define WRITE_ONLY_IMM 11
 
-struct axiWordAck
-{
-   //My format for ack: QID (24), opcode (5), syndrome (1), ackNo (24), msnNo (24), sackNo (24) 
-   ap_uint<128>  data;
- //  ap_uint<8>   strb;
- //  ap_uint<1>   last;
-};
-
+//struct for metadata in data packets.
 struct MetaData
 {
 	ap_uint<5> opcode;
 	ap_uint<24> seqNo;
 };
 
+//struct to store output of receiveAck module. 
 struct AckInfo
 {
 	bool ackSyndrome;
@@ -49,29 +49,22 @@ struct AckInfo
 	ap_uint<LOGBDP> numCQEDone;
 };
 
-
+//struct to store relevant QP context. 
 struct QPInfo 
 {
-  ap_uint<24>  expectedSeq;
-  ap_uint<24>  curMSN;
-  ap_uint<BDP>  ooo_bitmap1;
-  ap_uint<BDP>  ooo_bitmap2;
+	ap_uint<24>	expectedSeq;
+	ap_uint<24>	curMSN;
+	ap_uint<BDP>	ooo_bitmap1;
+	ap_uint<BDP>	ooo_bitmap2;
 };
 
-/*struct OtherInfo 
-{
-  ap_uint<BDP>  ones;
-};*/
-
-
-
-
+//defining the receiveData module.
 void receiveData(
 			stream<MetaData> &arrivedMetaData,
-      stream<QPInfo> &perQPInfoIn,
-      stream<QPInfo> &perQPInfoOut,
+			stream<QPInfo> &perQPInfoIn,
+			stream<QPInfo> &perQPInfoOut,
 			stream<AckInfo> &newAckInfo
-      );
+			);
 
 #endif // GLOBALS_H_ not defined
 

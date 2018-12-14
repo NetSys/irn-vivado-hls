@@ -1,3 +1,7 @@
+/* Author: Radhika Mittal
+ * File description: Testbench for testing the receiver-side module. Reads from an input trace of event triggers, invokes the receiveData module, and writes the output of the module in the result file.
+ */ 
+
 #include "globals.hpp"
 #include <stdlib.h>
 
@@ -16,8 +20,10 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 		
+	//initializing the QP context.
 	QPInfo perQPInfo[N];
 
+	//reading number of lines in the input trace.
 	for(int i = 0; i < N; i++) {
 		perQPInfo[i].expectedSeq = 0;
 		perQPInfo[i].curMSN = 0;
@@ -25,6 +31,7 @@ int main(int argc, char *argv[])
 		perQPInfo[i].ooo_bitmap2 = 0;
 	}
 
+	//reading each subsequent line.
 	int num_lines;
 	inputFile >> num_lines;
 	
@@ -33,6 +40,7 @@ int main(int argc, char *argv[])
 		ap_uint<5> opcode;
 		ap_uint<24> seq;
 
+		//reading metadata from input file.
 		inputFile >> QID >> opcode >> seq;
 
 		MetaData arrivedMetaData;
@@ -43,13 +51,17 @@ int main(int argc, char *argv[])
 
 		stream<AckInfo> newAckInfoStream;
 		stream<QPInfo> perQPInfoStream, perQPInfoStreamOut;
+
+		//write QP info to the input stream.
 		perQPInfoStream.write(perQPInfo[QID]);
 
 		receiveData(arrivedMetaDataStream, perQPInfoStream, perQPInfoStreamOut, newAckInfoStream);
 
+		//read output streams.
 		perQPInfo[QID] = perQPInfoStreamOut.read();
 		AckInfo newAckInfo = newAckInfoStream.read();
 
+		//write to output files.
 		QPInfo tempQPInfo = perQPInfo[QID];
 		outputFile << newAckInfo.ackSyndrome << " " << tempQPInfo.expectedSeq << " " << newAckInfo.sackNo << " " << tempQPInfo.curMSN << " " << newAckInfo.numCQEDone << "\n"; 
 	}

@@ -1,5 +1,11 @@
+/* Author: Radhika Mittal
+ * File description: receiveData module.
+ */
+
 #include "globals.hpp"
 
+//switch-case based look up for pop-count of 8 bits 
+//counting number of set bits in a bitmap of size 8.
 inline ap_uint<4> popcount8(ap_uint<8> val) {
 	switch(val) {
 		case 0 : return 0;
@@ -262,6 +268,7 @@ inline ap_uint<4> popcount8(ap_uint<8> val) {
 	return 0;
 }
 
+//popcount for 32 bits, invoking 8-bits popcount in parallel.
 inline ap_uint<6> popcount32(ap_uint<32> val) {
 	ap_uint<6> retVal = 0;
 	ap_uint<8> valPart; 
@@ -276,7 +283,7 @@ inline ap_uint<6> popcount32(ap_uint<32> val) {
 
 
 
-
+//the receiveData module.
 void receiveData(stream<MetaData> &arrivedMetaData, stream<QPInfo> &perQPInfoIn, stream<QPInfo> &perQPInfoOut, stream<AckInfo> &newAckInfo) {
 	//#pragma HLS pipeline
 	#pragma HLS STREAM variable=arrivedMetaData 
@@ -291,21 +298,24 @@ void receiveData(stream<MetaData> &arrivedMetaData, stream<QPInfo> &perQPInfoIn,
 	ap_uint<LOGBDP> localNumCQEDone = 0;
 	bool localAckSyndrome = 0;
 	
-
+	//checking if the packet will generate an MSN update or a CQE generation.
 	bool lastOrOnly = false;
 	bool cqeNeeded = false;
-	if((localArrivedMetaData.opcode == 2) || (localArrivedMetaData.opcode == 3) || (localArrivedMetaData.opcode == 4) || (localArrivedMetaData.opcode == 5)) {
+	if((localArrivedMetaData.opcode == SEND_LAST) || (localArrivedMetaData.opcode == SEND_LAST_IMM) || (localArrivedMetaData.opcode == SEND_ONLY) || (localArrivedMetaData.opcode == SEND_ONLY_IMM)) {
 		lastOrOnly = true;
 		cqeNeeded = true;
 	} else {
-		if((localArrivedMetaData.opcode == 8) || (localArrivedMetaData.opcode == 10) || (localArrivedMetaData.opcode == 12)) 
+		if((localArrivedMetaData.opcode == WRITE_LAST) || (localArrivedMetaData.opcode == WRITE_ONLY) || (localArrivedMetaData.opcode == READ_REQ)) 
 			lastOrOnly = true;
-		else if((localArrivedMetaData.opcode == 9) || (localArrivedMetaData.opcode == 11)) {
+		else if((localArrivedMetaData.opcode == WRITE_LAST_IMM) || (localArrivedMetaData.opcode == WRITE_ONLY_IMM)) {
 			lastOrOnly = true;
 			cqeNeeded = true;
 		}
 	}
 
+	//if the packet corresponds to expected sequence number,
+	//advance the bitmaps and increase expected sequence, message sequence (MSN),
+	//and number of CQEs completed accordingly. 
 	expectedPktReceived: if(localArrivedMetaData.seqNo == localPerQPInfo.expectedSeq) {
 		localPerQPInfo.expectedSeq++;
 		if(lastOrOnly) localPerQPInfo.curMSN++;
@@ -374,6 +384,7 @@ void receiveData(stream<MetaData> &arrivedMetaData, stream<QPInfo> &perQPInfoIn,
 			localPerQPInfo.expectedSeq += bits_to_shift;
 			localPerQPInfo.curMSN += msnInc;
 		}
+	//if arrived packet's sequence number is greater than expected, prepare a NACK and mark bitmap.	 
 	} else if(localArrivedMetaData.seqNo > localPerQPInfo.expectedSeq) {
 		localAckSyndrome = 1;
 		ap_uint<BDP> temp = 1;
@@ -385,8 +396,9 @@ void receiveData(stream<MetaData> &arrivedMetaData, stream<QPInfo> &perQPInfoIn,
 			localPerQPInfo.ooo_bitmap1 = localPerQPInfo.ooo_bitmap1 | temp;	
 		}
 	}
-	  
+		
 
+	//write output.
 	AckInfo localNewAckInfo;
 	localNewAckInfo.ackSyndrome = localAckSyndrome;
 	localNewAckInfo.cumAck = localPerQPInfo.expectedSeq;
