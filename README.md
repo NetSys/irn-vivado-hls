@@ -16,7 +16,7 @@ Each folder contains scripts to run synthesis, RTL verification and exporting fo
 
 The code assumes availability of Xilinx Vivado HLS 2017.2 (or any other HLS version that supports the target device Kintex Ultrascale XCKU060). 
 
-The code can also be used with the free Xilinx Vivado Webpack edition, by changing the target device in line 11 of the `run_hls*.tcl` files inside the *irn_receiver* and the *irn_sender* folders to one of those that are supported by the Webpack edition, and editing line 12 to match the clock rate supported by the device. However, the synthesis result would then differ from what is reported in the paper. 
+The code can also be used with the free Xilinx Vivado Webpack edition, by changing the target device specified in thje `run_hls*.tcl` files inside the *irn_receiver* and the *irn_sender* folders to one of those that are supported by the Webpack edition, and editing the following line to match the clock rate supported by the device. However, the synthesis result would then differ from what is reported in the paper. 
 
 ###### IRN Receiver
 
