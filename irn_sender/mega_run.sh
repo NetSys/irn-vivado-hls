@@ -1,5 +1,6 @@
-source "path to Vivado installation"/settings64.sh
-export XILINXD_LICENSE_FILE="source of license file"
+#add source and licence information below, and uncomment the lines.
+#source "path to Vivado installation"/settings64.sh
+#export XILINXD_LICENSE_FILE="source of license file"
 
 touch txFree_report_summary
 touch receiveAck_report_summary
