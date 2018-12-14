@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
 	//initializing the QP context.
 	QPInfo perQPInfo[N];
 
-	//reading number of lines in the input trace.
 	for(int i = 0; i < N; i++) {
 		perQPInfo[i].expectedSeq = 0;
 		perQPInfo[i].curMSN = 0;
@@ -31,10 +30,11 @@ int main(int argc, char *argv[])
 		perQPInfo[i].ooo_bitmap2 = 0;
 	}
 
-	//reading each subsequent line.
+	//reading number of lines in the input trace.
 	int num_lines;
 	inputFile >> num_lines;
 	
+	//reading each subsequent line.
 	for (int i = 0; i < num_lines; i++) {
 		int QID;
 		ap_uint<5> opcode;
