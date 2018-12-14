@@ -1,4 +1,4 @@
-source /data/xilinx/Vivado/2017.2/settings64.sh
+source "path to Vivado installation"/settings64.sh
 export XILINXD_LICENSE_FILE="source of license file"
 
 touch txFree_report_summary
